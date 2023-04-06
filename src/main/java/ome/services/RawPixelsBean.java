@@ -96,8 +96,8 @@ public class RawPixelsBean extends AbstractStatefulBean implements
     /** SQL action instance for this class. */
     private transient SqlAction sql;
 
-    /** TileSizes */
-    private transient TileSizes tileSizes;
+    /** The server's OMERO data directory. */
+    private transient String omeroDataDir;
 
     /**
      * default constructor
@@ -110,9 +110,9 @@ public class RawPixelsBean extends AbstractStatefulBean implements
      * 
      * @param checking
      */
-    public RawPixelsBean(boolean checking, TileSizes tileSizes) {
+    public RawPixelsBean(boolean checking, String omeroDataDir) {
         this.diskSpaceChecking = checking;
-        this.tileSizes = tileSizes;
+        this.omeroDataDir = omeroDataDir;
     }
 
     public synchronized Class<? extends ServiceInterface> getServiceInterface() {
@@ -682,7 +682,7 @@ public class RawPixelsBean extends AbstractStatefulBean implements
     public synchronized Map<Integer, int[]> getHistogram(int[] channels,
             int binCount, boolean globalRange, PlaneDef plane) {
         errorIfNotLoaded();
-
+        TileSizes tileSizes = dataService.getTileSizes();
         //Find resolution level closest to max plane size without
         //exceeding it
         int resolutionLevel = 0;
